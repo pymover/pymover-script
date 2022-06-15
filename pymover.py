@@ -1,6 +1,7 @@
 import shutil
 import time
 import os
+import datetime
 from discord_webhook import DiscordWebhook
 
 print(""" ________  ___    ___ _____ ______   ________  ___      ___ _______   ________     
@@ -21,14 +22,15 @@ def main_app(r):
     file_source = 'E:\MoviesSource/'
     file_destination = 'E:\Movies/'
     path_to_watch = file_source
-    discordwebhookid = ''
+    #discordwebhookid = ''
+    now = datetime.datetime.now()
 
     time.sleep(1)
     get_source = os.listdir(file_source)
     get_destination = os.listdir(file_destination)
 
-    print("Source: ", get_source)
-    print("Local: ", get_destination)
+    #print("Source: ", get_source)
+    #print("Local: ", get_destination)
 
     before = dict ([(f, None) for f in os.listdir (path_to_watch)])
     after = dict ([(f, None) for f in os.listdir (path_to_watch)])
@@ -36,14 +38,14 @@ def main_app(r):
     if added or r:
         for g in get_source:
             if os.path.exists(file_destination+g):
-                print("Skipped!", g)
+                print(now.strftime("[%Y-%m-%d %H:%M:%S]"), "Skipped!: ", g)
             else:
                 time.sleep(3)
                 shutil.move(file_source + g, file_destination)
-                print('Moved:', g)
+                print(now.strftime("[%Y-%m-%d %H:%M:%S]"), "Moved:", g)
 
-                webhook = DiscordWebhook(url=(discordwebhookid), content='Moved: ' + g)
-                response = webhook.execute()
+                #webhook = DiscordWebhook(url=(discordwebhookid), content='Moved: ' + g)
+                #response = webhook.execute()
     
 
         r = False
