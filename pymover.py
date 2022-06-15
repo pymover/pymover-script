@@ -15,15 +15,13 @@ def menu():
     print("[1] Run")
     print("[2] Exit\n")
 
-menu()
-option =int(input("Enter your option: "))
-
-ans = True
+def main_app(r):
     
-def main_app():
     file_source = 'E:\MoviesSource/'
     file_destination = 'E:\Movies/'
     
+    path_to_watch = file_source
+
     time.sleep(1)
     get_source = os.listdir(file_source)
     get_destination = os.listdir(file_destination)
@@ -31,19 +29,31 @@ def main_app():
     print("Source: ", get_source)
     print("Local: ", get_destination)
 
-    for g in get_source:
-        if os.path.exists(file_destination+g):
-            print("Skipped!", g)
-        else:
-            time.sleep(3)
-            shutil.move(file_source + g, file_destination)
-            print('Moved:', g)
+    before = dict ([(f, None) for f in os.listdir (path_to_watch)])
+    after = dict ([(f, None) for f in os.listdir (path_to_watch)])
+    added = [f for f in after if not f in before]
+    if added or r:
+        for g in get_source:
+            if os.path.exists(file_destination+g):
+                print("Skipped!", g)
+            else:
+                time.sleep(3)
+                shutil.move(file_source + g, file_destination)
+                print('Moved:', g)
+        r = False
+
+menu()
+
+
+option = int(input("Enter your option: "))
+ans = True
+
+f_r = True
 
 while ans:
     if option == 1:
-        main_app()
+        main_app(f_r)
     elif option == 2:
         exit()
-
     else:
         print("Invalid option.")
