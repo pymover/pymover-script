@@ -4,3 +4,4 @@
 Pymover is a python script that will automaticly move your folders, subfolders & files.
 
 ## Usage:
+More information coming soon!
