@@ -1,6 +1,7 @@
 import shutil
 import time
 import os
+from discord_webhook import DiscordWebhook
 
 print(""" ________  ___    ___ _____ ______   ________  ___      ___ _______   ________     
 |\   __  \|\  \  /  /|\   _ \  _   \|\   __  \|\  \    /  /|\  ___ \ |\   __  \    
@@ -19,8 +20,8 @@ def main_app(r):
     
     file_source = 'E:\MoviesSource/'
     file_destination = 'E:\Movies/'
-    
     path_to_watch = file_source
+    discordwebhookid = ''
 
     time.sleep(1)
     get_source = os.listdir(file_source)
@@ -40,6 +41,11 @@ def main_app(r):
                 time.sleep(3)
                 shutil.move(file_source + g, file_destination)
                 print('Moved:', g)
+
+                webhook = DiscordWebhook(url=(discordwebhookid), content='Moved: ' + g)
+                response = webhook.execute()
+    
+
         r = False
 
 menu()
