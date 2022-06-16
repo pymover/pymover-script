@@ -2,8 +2,12 @@ import shutil
 import time
 import os
 
-file_source = 'E:\MoviesSource/'
-file_destination = 'E:\Movies/'
+menu_options = {
+    1: 'Run',
+    2: 'Option 2',
+    3: 'Option 3',
+    4: 'Exit',
+}
 
 def logo():
     print(""" ________  ___    ___ _____ ______   ________  ___      ___ _______   ________     
@@ -15,22 +19,24 @@ def logo():
     \|__||\___/ /        \|__|     \|__|\|_______|\|__|/       \|_______|\|__|\|__|
          \|___|/                                                                   \n""")
 
-def clearConsole():
-    os.system("cls")
+logo()
 
-def menu():
-    print("[1] Run")
-    print("[2] Exit\n")
+def print_menu():
+    for key in menu_options.keys():
+        print (key, '--', menu_options[key] )
 
 def option1():
+    file_source = 'E:\MoviesSource/'
+    file_destination = 'E:\Movies/'
+    
     path_to_watch = file_source
 
     time.sleep(1)
     get_source = os.listdir(file_source)
     get_destination = os.listdir(file_destination)
 
-    #print("Source: ", get_source)
-    #print("Local: ", get_destination)
+    print("Source: ", get_source)
+    print("Local: ", get_destination)
 
     for g in get_source:
         if os.path.exists(file_destination+g):
@@ -39,30 +45,31 @@ def option1():
             time.sleep(3)
             shutil.move(file_source + g, file_destination)
             print('Moved:', g)
+    print("---------------------------")
 
 def option2():
-    exit()
+     print('Handle option \'Option 2\'')
 
-def drawMainmenu():
-    logo()
-    menu()
+def option3():
+     print('Handle option \'Option 3\'')
 
-
-
-drawMainmenu()
-option = ""
-try:
-    option = input('Enter one of the options above: ')
-except:
-    print('Wrong input. Please enter a number ...')
-
-while option != "null":
-    # break the cycle --V
-    if option == "0":
-        option = "null"
-    # program --V
-    elif option == "1":
-        option1()
-    # break the exit --V
-    elif option == "2":
-        option2()
+if __name__=='__main__':
+    while(True):
+        print_menu()
+        option = ""
+        try:
+            option = input('Enter one of the options above: ')
+        except:
+            print('Wrong input. Please enter a number ...')
+        #Check what choice was entered and act accordingly
+        if option == "1":
+           option1()
+        elif option == "2":
+            option2()
+        elif option == "3":
+            option3()
+        elif option == "4":
+            print('Thanks for using pymover :D')
+            exit()
+        else:
+            print('Invalid option. Please enter a number between 1 and 4.')
