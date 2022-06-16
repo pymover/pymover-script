@@ -29,8 +29,8 @@ def main_app(r):
     get_source = os.listdir(file_source)
     get_destination = os.listdir(file_destination)
 
-    #print("Source: ", get_source)
-    #print("Local: ", get_destination)
+    print("Source: ", get_source)
+    print("Local: ", get_destination)
 
     before = dict ([(f, None) for f in os.listdir (path_to_watch)])
     after = dict ([(f, None) for f in os.listdir (path_to_watch)])
