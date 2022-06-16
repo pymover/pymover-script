@@ -4,9 +4,6 @@ import os
 import datetime
 from discord_webhook import DiscordWebhook
 
-def cls(path=''):
-    os.system('cls' if os.name=='nt' else 'clear')
-    ui.logo(path=path)
 def logo(path=''):
     print('                                                                                       ')
     print('   ▄███████▄ ▄██   ▄     ▄▄▄▄███▄▄▄▄    ▄██████▄   ▄█    █▄     ▄████████    ▄████████ ')
