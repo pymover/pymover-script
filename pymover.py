@@ -1,6 +1,8 @@
 import shutil
 import time
 import os
+from datetime import datetime
+
 
 file_source = 'E:\MoviesSource/'
 file_destination = 'E:\Movies/'
@@ -24,6 +26,8 @@ def menu():
 
 def option1():
     path_to_watch = file_source
+
+
 
     time.sleep(1)
     get_source = os.listdir(file_source)
