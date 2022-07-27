@@ -2,7 +2,13 @@ import shutil
 import time
 import os
 import datetime
+from configparser import ConfigParser
 from discord_webhook import DiscordWebhook
+
+
+cfig_file = "config.ini"
+config = ConfigParser()
+config.read(cfig_file)
 
 def logo(path=''):
     print('                                                                                       ')
