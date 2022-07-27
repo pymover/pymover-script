@@ -3,7 +3,6 @@ import time
 import os
 import datetime
 from configparser import ConfigParser
-from discord_webhook import DiscordWebhook
 
 
 cfig_file = "config.ini"
@@ -37,7 +36,6 @@ def main_app(r):
     file_source = config["settings"]["source"]
     file_destination = config["settings"]["destination"]
     path_to_watch = file_source
-    discordwebhookid = 'MTAwMTkzMTM4MTM4NDk1Nzk4Mg.G-knc8.CyqyaNl4KUAjLfIXFEWlBySu9hROgL_OIom0ko'
     now = datetime.datetime.now()
 
     get_source = os.listdir(file_source)
@@ -60,9 +58,6 @@ def main_app(r):
                 time.sleep(3)
                 shutil.move(file_source + g, file_destination)
                 print(now.strftime("[%Y-%m-%d %H:%M:%S]"), "Moved:", g)
-
-                webhook = DiscordWebhook(url=(discordwebhookid), content='Moved: ' + g)
-                response = webhook.execute()
     
         r = False
 
