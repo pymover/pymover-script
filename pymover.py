@@ -33,29 +33,46 @@ def logo(path=''):
     print(' ▄████▀       ▀█████▀   ▀█   ███   █▀   ▀██████▀   ▀██████▀    ██████████   ███    ███ ')
     print('                                                                                       ')
 
-
-logo()
 def menu():
     print("[1] Run")
     print("[2] Settings")
-    print("[2] Exit\n")
+    print("[3] Exit\n")
 
 def clear(): 
     os.system('cls')
 
 def settings_menu():
+    logo()
+    print("Examples of how inputs should look \n Paths: E:\Documents\Movies/")
 
-    source_inp = int(input("Enter your option: "))
-    dest_inp = int(input("Enter your option: "))
+    source_inp = input("Enter your source path: ")
+    dest_inp = input("Enter your destination path: ")
+    sleep_timer_inp = input("Enter your sleep_timer: ")
+    wb_hook_id_inp = input("Enter your discord webhook id: ")
 
-    config.set("SETTINGS", "sleep_timer", "5")
 
+    config.set("SETTINGS", "source", source_inp)
+    config.set("SETTINGS", "destination", dest_inp)
+    config.set("SETTINGS", "sleep_timer", sleep_timer_inp)
+    config.set("SETTINGS", "discord_webhook_id", wb_hook_id_inp)
 
     with open(file, 'w') as configfile:
         config.write(configfile)
-        
-def main_app(r):
+    
+    clear()
 
+    logo()
+    menu()
+
+    option = int(input("Enter your option: "))
+
+
+    print("Type 'exit' to return to the main menu.\n")
+
+    ans = True
+    f_r = True
+
+def main_app(r):
     p_timer = int(config["settings"]["sleep_timer"])
     print(p_timer)
     file_source = config["settings"]["source"]
@@ -86,13 +103,13 @@ def main_app(r):
     
         r = False
 
+logo()
 menu()
 
 option = int(input("Enter your option: "))
 
 clear()
 
-logo()
 
 print("Type 'exit' to return to the main menu.\n")
 
