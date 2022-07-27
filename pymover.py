@@ -32,13 +32,14 @@ def clear():
 
 def main_app(r):
     
-    file_source = 'E:\MoviesSource/'
-    file_destination = 'E:\Movies/'
+    p_timer = int(config["settings"]["sleep_timer"])
+    print(p_timer)
+    file_source = config["settings"]["source"]
+    file_destination = config["settings"]["destination"]
     path_to_watch = file_source
     discordwebhookid = 'MTAwMTkzMTM4MTM4NDk1Nzk4Mg.G-knc8.CyqyaNl4KUAjLfIXFEWlBySu9hROgL_OIom0ko'
     now = datetime.datetime.now()
 
-    time.sleep(1)
     get_source = os.listdir(file_source)
     get_destination = os.listdir(file_destination)
 
@@ -48,6 +49,8 @@ def main_app(r):
     before = dict ([(f, None) for f in os.listdir (path_to_watch)])
     after = dict ([(f, None) for f in os.listdir (path_to_watch)])
     added = [f for f in after if not f in before]
+
+    time.sleep(p_timer)
 
     if added or r:
         for g in get_source:
