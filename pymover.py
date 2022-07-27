@@ -29,7 +29,7 @@ def main_app(r):
     file_source = 'E:\MoviesSource/'
     file_destination = 'E:\Movies/'
     path_to_watch = file_source
-    #discordwebhookid = ''
+    discordwebhookid = 'MTAwMTkzMTM4MTM4NDk1Nzk4Mg.G-knc8.CyqyaNl4KUAjLfIXFEWlBySu9hROgL_OIom0ko'
     now = datetime.datetime.now()
 
     time.sleep(1)
@@ -52,8 +52,8 @@ def main_app(r):
                 shutil.move(file_source + g, file_destination)
                 print(now.strftime("[%Y-%m-%d %H:%M:%S]"), "Moved:", g)
 
-                #webhook = DiscordWebhook(url=(discordwebhookid), content='Moved: ' + g)
-                #response = webhook.execute()
+                webhook = DiscordWebhook(url=(discordwebhookid), content='Moved: ' + g)
+                response = webhook.execute()
     
         r = False
 
