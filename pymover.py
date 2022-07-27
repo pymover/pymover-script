@@ -1,3 +1,4 @@
+from calendar import c
 import shutil
 import time
 import os
@@ -5,9 +6,20 @@ import datetime
 from configparser import ConfigParser
 
 
-cfig_file = "config.ini"
+file = "config.ini"
 config = ConfigParser()
-config.read(cfig_file)
+
+config.read(file)
+
+if not config.has_section("SETTINGS"):
+    config.add_section("SETTINGS")
+    config.set("SETTINGS", "source", "E:\MoviesSource/")
+    config.set("SETTINGS", "destination", "E:\Movies/")
+    config.set("SETTINGS", "sleep_timer", "5")
+    config.set("SETTINGS", "discord_webhook_id", "id_here")
+
+with open(file, 'w') as configfile:
+    config.write(configfile)
 
 def logo(path=''):
     print('                                                                                       ')
@@ -20,6 +32,8 @@ def logo(path=''):
     print('  ███        ███   ███ ███   ███   ███ ███    ███ ███    ███   ███    ███   ███    ███ ')
     print(' ▄████▀       ▀█████▀   ▀█   ███   █▀   ▀██████▀   ▀██████▀    ██████████   ███    ███ ')
     print('                                                                                       ')
+
+
 logo()
 def menu():
     print("[1] Run")
@@ -29,8 +43,19 @@ def menu():
 def clear(): 
     os.system('cls')
 
+def settings_menu():
+
+    source_inp = int(input("Enter your option: "))
+    dest_inp = int(input("Enter your option: "))
+
+    config.set("SETTINGS", "sleep_timer", "5")
+
+
+    with open(file, 'w') as configfile:
+        config.write(configfile)
+        
 def main_app(r):
-    
+
     p_timer = int(config["settings"]["sleep_timer"])
     print(p_timer)
     file_source = config["settings"]["source"]
@@ -68,6 +93,7 @@ option = int(input("Enter your option: "))
 clear()
 
 logo()
+
 print("Type 'exit' to return to the main menu.\n")
 
 ans = True
@@ -78,6 +104,8 @@ while ans:
     if option == 1:
         main_app(f_r)
     elif option == 2:
+        settings_menu()
+    elif option == 3:
         exit()
     else:
         print("Invalid option.")
