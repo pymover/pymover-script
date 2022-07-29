@@ -111,8 +111,6 @@ option = int(input("Enter your option: "))
 clear()
 
 
-print("Type 'exit' to return to the main menu.\n")
-
 ans = True
 
 f_r = True
