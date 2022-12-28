@@ -79,6 +79,13 @@ def settings_menu():
 
     print("Type 'exit' to return to the main menu.\n")
 
+    commandexit = input("Enter a command: ")
+    if commandexit.lower() == "exit":
+        exit()
+    else:
+        print("Unknown command. Try again.")
+    print("Exiting Pymover.")
+
     ans = True
     f_r = True
 
