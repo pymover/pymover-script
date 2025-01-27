@@ -1,28 +1,10 @@
-from calendar import c
 import shutil
 import time
 import os
 import datetime
-from configparser import ConfigParser
+from discord_webhook import DiscordWebhook, DiscordEmbed
 
-# Configuration settings 
-
-file = "config.ini"
-config = ConfigParser()
-
-config.read(file)
-
-if not config.has_section("SETTINGS"):
-    config.add_section("SETTINGS")
-    config.set("SETTINGS", "source", "E:\MoviesSource/")
-    config.set("SETTINGS", "destination", "E:\Movies/")
-    config.set("SETTINGS", "sleep_timer", "5")
-    ##config.set("SETTINGS", "discord_webhook_id", "id_here")
-
-with open(file, 'w') as configfile:
-    config.write(configfile)
-
-# Logo
+webhook = DiscordWebhook(url='discord-webhook-link')
 
 def logo(path=''):
     print('                                                                                       ')
@@ -35,92 +17,67 @@ def logo(path=''):
     print('  ███        ███   ███ ███   ███   ███ ███    ███ ███    ███   ███    ███   ███    ███ ')
     print(' ▄████▀       ▀█████▀   ▀█   ███   █▀   ▀██████▀   ▀██████▀    ██████████   ███    ███ ')
     print('                                                                                       ')
-
-# Menu
-
+logo()
 def menu():
     print("[1] Run")
     print("[2] Settings")
     print("[3] Exit\n")
 
-# Clear console
-
 def clear(): 
     os.system('cls')
 
-# Settings menu
-
-def settings_menu():
-    logo()
-    print("\nExamples of how inputs should look: Paths: E:\Documents\Folder/")
-    print("Type 'exit' to return to the main menu.\n")
-
-    source_inp = input("Enter your source path: ")
-    dest_inp = input("Enter your destination path: ")
-    sleep_timer_inp = input("Enter your sleep_timer: ")
-    ##wb_hook_id_inp = input("Enter your discord webhook id: ")
-
-
-    config.set("SETTINGS", "source", source_inp)
-    config.set("SETTINGS", "destination", dest_inp)
-    config.set("SETTINGS", "sleep_timer", sleep_timer_inp)
-    ##config.set("SETTINGS", "discord_webhook_id", wb_hook_id_inp)
-
-    with open(file, 'w') as configfile:
-        config.write(configfile)
-    
-    clear()
-
-    logo()
-    menu()
-
-    option = int(input("Enter your option: "))
-
-
-    print("Type 'exit' to return to the main menu.\n")
-
-    ans = True
-    f_r = True
-
-# Main configuration, tranfser
-
 def main_app(r):
-    p_timer = int(config["settings"]["sleep_timer"])
-    print(p_timer)
-    file_source = config["settings"]["source"]
-    file_destination = config["settings"]["destination"]
+    
+    file_source = 'enter-file-source-path'
+    file_destination = 'enter-file-destination-path'
     path_to_watch = file_source
     now = datetime.datetime.now()
 
+    time.sleep(1)
     get_source = os.listdir(file_source)
     get_destination = os.listdir(file_destination)
 
-    print("Source: ", get_source)
-    print("Local: ", get_destination)
+    #print("Source: ", get_source)
+    #print("Local: ", get_destination)
 
     before = dict ([(f, None) for f in os.listdir (path_to_watch)])
     after = dict ([(f, None) for f in os.listdir (path_to_watch)])
     added = [f for f in after if not f in before]
 
-    time.sleep(p_timer)
-
     if added or r:
         for g in get_source:
+            #if file in file_destination exists skippes file
             if os.path.exists(file_destination+g):
+                time.sleep(40)
+                #console oupout if file is skipped
                 print(now.strftime("[%Y-%m-%d %H:%M:%S]"), "Skipped!: ", g)
             else:
+                #moves file to file_destination
                 time.sleep(3)
                 shutil.move(file_source + g, file_destination)
+                #console output if file is moved
                 print(now.strftime("[%Y-%m-%d %H:%M:%S]"), "Moved:", g)
-    
-        r = False
 
-logo()
+                #discord message if file is moved
+                embed = DiscordEmbed(color='000000')
+                embed.set_author(name='Pymover', url='https://github.com/MathiasKiwi', icon_url='https://avatars.githubusercontent.com/u/107579533?s=200&v=4')
+                embed.add_embed_field(name='Moved movie:', value=g)
+                embed.set_footer(text='Pymover')
+                embed.set_timestamp()
+
+                webhook.add_embed(embed)
+                response = webhook.execute()
+
+        r = False
 menu()
 
 option = int(input("Enter your option: "))
 
 clear()
+
+logo()
+print("Type 'exit' to return to the main menu.\n")
+
 
 
 ans = True
@@ -131,8 +88,6 @@ while ans:
     if option == 1:
         main_app(f_r)
     elif option == 2:
-        settings_menu()
-    elif option == 3:
         exit()
     else:
         print("Invalid option.")
