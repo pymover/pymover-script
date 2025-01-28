@@ -2,7 +2,7 @@
 # pymover-script
 
 ## What is pymover?
-Pymover is a Python-based file management tool that monitors a specific directory for new files, moves them to a destination folder, and sends updates via a Discord webhook. It also includes real-time logging of file operations to keep you informed about the status of each action.
+Pymover is a Python-based file management tool that monitors a specific directory for new files, moves them to a destination folder, and sends updates via a Discord webhook. It also logs file operations in real time to keep you informed about the status of each action.
 
 # Features
 
@@ -37,9 +37,9 @@ Sends notifications to a Discord channel whenever a file is moved. Each message 
 ## Setup
 
 Replace the following placeholders in the script with your specific details:
-enter-file-source-path: Path to the folder you want to monitor.
-enter-file-destination-path: Path to the folder where files should be moved.
-discord-webhook-link: Your Discord webhook URL.
+Enter-file-source-path: Path to the folder you want to monitor.
+Enter-file-destination-path: Path to the folder where files should be moved.
+Discord-webhook-link: Your Discord webhook URL.
 
 ## Execution
 
@@ -47,7 +47,7 @@ Run the script and select the desired option from the menu. Files will be monito
 
 ## Customization
 
-The script is flexible and can be tailored to suit your specific file management needs or extended with additional features.
+The script is flexible and can be tailored to suit your file management needs or extended with additional features.
 
-## Usage:
-More information coming soon!
+
+Pymover is a side project. I'm making this script for my use case and thought maybe someone else wanted to use it, too :)
