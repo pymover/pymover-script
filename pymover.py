@@ -4,12 +4,12 @@ import os
 import datetime
 import json
 from discord_webhook import DiscordWebhook, DiscordEmbed
+from tqdm import tqdm
 
-# Path to the configuration file
 CONFIG_FILE = 'config.json'
 
+
 def print_logo():
-    """Displays an ASCII art logo."""
     logo_art = """
        ▄███████▄ ▄██   ▄     ▄▄▄▄███▄▄▄▄    ▄██████▄   ▄█    █▄     ▄████████    ▄████████ 
       ███    ███ ███   ██▄ ▄██▀▀▀███▀▀▀██▄ ███    ███ ███    ███   ███    ███   ███    ███ 
@@ -22,31 +22,20 @@ def print_logo():
     """
     print(logo_art)
 
-def display_menu():
-    """Displays the main menu options."""
-    print("[1] Run File Mover")
-    print("[2] Configure Paths")
-    print("[3] Configure Discord Webhook")
-    print("[4] Exit\n")
-
-def clear_console():
-    """Clears the console screen."""
-    os.system('cls' if os.name == 'nt' else 'clear')
 
 def load_config():
-    """Loads the configuration from a file."""
     if not os.path.exists(CONFIG_FILE):
         return {}
     with open(CONFIG_FILE, 'r') as config_file:
         return json.load(config_file)
 
+
 def save_config(config):
-    """Saves the configuration to a file."""
     with open(CONFIG_FILE, 'w') as config_file:
         json.dump(config, config_file, indent=4)
 
+
 def configure_paths():
-    """Prompts the user to set the source and destination paths."""
     source_path = input("Enter the source folder path: ").strip()
     destination_path = input("Enter the destination folder path: ").strip()
 
@@ -60,36 +49,56 @@ def configure_paths():
     save_config(config)
     print("Paths have been successfully configured!")
 
-def configure_webhook():
-    """Prompts the user to set the Discord webhook URL."""
-    webhook_url = input("Enter the Discord webhook URL: ").strip()
 
+def configure_webhook():
+    webhook_url = input("Enter the Discord webhook URL: ").strip()
     if not webhook_url.startswith("https://"):
         print("Error: Invalid webhook URL. Please enter a valid URL.")
         return
-
     config = load_config()
     config["webhook"] = webhook_url
     save_config(config)
     print("Discord webhook URL has been successfully configured!")
 
-def move_files_continuously(file_source, file_destination, webhook_url):
-    """Continuously monitors and moves files from the source to the destination folder."""
+
+def move_files(file_source, file_destination, webhook_url):
+    """Monitors and moves files from the source to the destination folder."""
     webhook = DiscordWebhook(url=webhook_url)
-    print(f"Monitoring '{file_source}' for new files. Press Ctrl+C to stop.\n")
+    move_log = []  # Stores log entries for display
+
     try:
         while True:
+            # Clear only the "Monitoring" line (preserves move log)
+            os.system('cls' if os.name == 'nt' else 'clear')
+            print_logo()
+            print("Monitoring '{}' for new files. Press Ctrl+C to stop.\n".format(file_source))
+
+            # Display the log
+            for log_entry in move_log:
+                print(log_entry)
+
             files_in_source = os.listdir(file_source)
 
-            for file_name in files_in_source:
+            if not files_in_source:
+                print("\nNo files found. Waiting...\n")
+                time.sleep(5)
+                continue
+
+            print(f"\nFound {len(files_in_source)} file(s) to move. Starting transfer...\n")
+
+            # Use tqdm to show the progress bar for file movement
+            for file_name in tqdm(files_in_source, desc="Moving Files", unit="file"):
                 source_file = os.path.join(file_source, file_name)
                 destination_file = os.path.join(file_destination, file_name)
 
                 if os.path.exists(destination_file):
-                    print(datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), f"Skipped!: {file_name}")
+                    log_entry = datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S]") + f" Skipped: {file_name}"
+                    move_log.append(log_entry)
                 else:
+                    # Move the file
                     shutil.move(source_file, destination_file)
-                    print(datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S]"), f"Moved: {file_name}")
+                    log_entry = datetime.datetime.now().strftime("[%Y-%m-%d %H:%M:%S]") + f" Moved: {file_name}"
+                    move_log.append(log_entry)
 
                     # Send a Discord notification
                     embed = DiscordEmbed(color='000000')
@@ -105,27 +114,31 @@ def move_files_continuously(file_source, file_destination, webhook_url):
                     webhook.add_embed(embed)
                     webhook.execute()
 
-            # Small delay to prevent excessive CPU usage
-            time.sleep(2)
+            # Limit the log size to the last 50 entries
+            if len(move_log) > 50:
+                move_log = move_log[-50:]
 
+            # Small delay after processing all files
+            time.sleep(2)
     except KeyboardInterrupt:
-        print("\nStopping file mover. Returning to the main menu.")
+        print("\nGracefully exiting... No files are being moved anymore.")
+        return
+
 
 def main():
-    """Main function to run the application."""
     print_logo()
 
     while True:
-        display_menu()
+        print("[1] Run File Mover")
+        print("[2] Configure Paths")
+        print("[3] Configure Discord Webhook")
+        print("[4] Exit\n")
 
         try:
             option = int(input("Enter your option: "))
         except ValueError:
             print("Invalid input. Please enter a valid number.")
             continue
-
-        clear_console()
-        print_logo()
 
         if option == 1:
             config = load_config()
@@ -136,7 +149,8 @@ def main():
             file_source = config["source"]
             file_destination = config["destination"]
             webhook_url = config["webhook"]
-            move_files_continuously(file_source, file_destination, webhook_url)
+
+            move_files(file_source, file_destination, webhook_url)
         elif option == 2:
             configure_paths()
         elif option == 3:
@@ -146,6 +160,7 @@ def main():
             break
         else:
             print("Invalid option. Please select a valid option.")
+
 
 if __name__ == "__main__":
     main()
