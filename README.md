@@ -12,14 +12,10 @@ Run the script: Start the file monitoring and moving process.
 Adjust settings: (Not implemented yet).
 Exit: Close the application.
 
-(GIF: Navigating the menu and selecting “Run.”)
-
 ## File Monitoring and Management
 Continuously monitors the specified source directory for new files.
 Automatically moves new files to the destination directory.
 Skips files that already exist in the destination folder.
-
-(GIF: Watching a new file appear in the source folder and being moved to the destination.)
 
 ## Console Logging
 
